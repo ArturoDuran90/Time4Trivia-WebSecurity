@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Time 4 Trivia Leaderboard!
+  ol
+    each val in leaders
+      li
+        div
+          label= val.name + ' : '
+          span= val.score

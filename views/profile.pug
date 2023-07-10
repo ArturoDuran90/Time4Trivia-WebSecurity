@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1 Profile
+  label Your Username: #{user.username}
+  br
+  img(src="/images/defaultProfile.png", class="profileImg")
+  br
+  if error != ''
+    label(class='error') #{error}
+  if msg != ''
+    label(class='msg') #{msg}
+  h2 Update your profile 
+  form(action='profile', method='post')
+    label First Name:
+    input(type='text', name='firstName', value=user.firstName)
+    <br>
+    label Last Name:
+    input(type='text', name='lastName', value=user.lastName)
+    <br>
+    input(type='submit', value='Update Profile')
+  if pwdError != ''
+    label(class='error') #{pwdError}
+  h2 Change your password
+  form(action='updatePassword', method='post')
+    label Current Password:
+    input(type='password', name='currentPassword')
+    <br>
+    label New Password:
+    input(type='password', name='newPassword')
+    <br>
+    label Confirm Password:
+    input(type='password', name='confirmPassword')
+    <br>
+    input(type='submit', value='Update Password')
