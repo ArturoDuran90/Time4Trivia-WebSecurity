@@ -316,3 +316,28 @@ exports.updateProfile = async function (userId, firstName, lastName) {
         return result;
     }
 }
+
+/**
+ * @returns and array of questions
+ */
+exports.getQuestions = async function () {
+    let result = {};
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT * from triviaquestions;`;
+
+        result = await con.query(sql);
+
+        result = result[0];
+
+        console.log("DAL Questions:", result);
+    } catch (err) {
+        console.log(err);
+    }finally{
+        con.end();
+    }
+
+    return result;
+}

@@ -2,4 +2,19 @@ extends layout
 
 block content
     h1 Play Time 4 Trivia!
-    button Go
+    #triviaSection
+        //- h3 Question:
+        // Here is where the questions will be renderer one by one
+        //{Question}
+        //each val in questions
+        each question in questions
+            h3= question.question
+            
+            form#triviaGameForm(method='post' action='')
+                each answerKey in ['correct_answer', 'incorrect_answer_1', 'incorrect_answer_2', 'incorrect_answer_3']
+                    - const answer = question[answerKey]
+                    input(type='radio', name='answer', value=answer)
+                    label(for=`answerInput${answerKey}`) #{answer}
+                    br
+                br
+                input(value='Submit Answer' type='submit')

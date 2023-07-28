@@ -126,3 +126,11 @@ exports.getUserById = function (userId) {
 exports.deleteUserById = function (userId) {
     return sqlDAL.deleteUserById(userId);
 }
+
+/**
+ * 
+ * @returns questions as JSON object
+ */
+exports.getQuestions = async function (){
+    return await sqlDAL.getQuestions();
+}
