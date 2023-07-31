@@ -2,19 +2,16 @@ extends layout
 
 block content
     h1 Play Time 4 Trivia!
-    #triviaSection
-        //- h3 Question:
-        // Here is where the questions will be renderer one by one
-        //{Question}
-        //each val in questions
-        each question in questions
+        - const numQuestionsToShow = 5
+        - const shuffledQuestions = questions.slice().sort(() => 0.5 - Math.random()).slice(0, numQuestionsToShow)
+        each question in shuffledQuestions
             h3= question.question
             
-            form#triviaGameForm(method='post' action='')
-                each answerKey in ['correct_answer', 'incorrect_answer_1', 'incorrect_answer_2', 'incorrect_answer_3']
-                    - const answer = question[answerKey]
-                    input(type='radio', name='answer', value=answer)
-                    label(for=`answerInput${answerKey}`) #{answer}
+            form(method='post' action='score')
+                - const shuffledAnswers = [question.correct_answer, question.incorrect_answer_1, question.incorrect_answer_2, question.incorrect_answer_3].sort(() => 0.5 - Math.random())
+                each answer in shuffledAnswers
+                    input(required type='radio', name=`question-${question.id}`, value=answer)
+                    label(for=`answerInput${answer}`) #{answer}
                     br
                 br
-                input(value='Submit Answer' type='submit')
+        input(value='Submit Answer' type='submit')
