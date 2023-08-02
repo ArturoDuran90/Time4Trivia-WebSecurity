@@ -332,7 +332,7 @@ exports.getQuestions = async function () {
 
         result = result[0];
 
-        console.log("DAL Questions:", result);
+        //console.log("DAL Questions:", result);
     } catch (err) {
         console.log(err);
     }finally{

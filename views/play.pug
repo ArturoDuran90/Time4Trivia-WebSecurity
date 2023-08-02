@@ -2,16 +2,14 @@ extends layout
 
 block content
     h1 Play Time 4 Trivia!
-        - const numQuestionsToShow = 5
-        - const shuffledQuestions = questions.slice().sort(() => 0.5 - Math.random()).slice(0, numQuestionsToShow)
+    form(method='post' action='score')
         each question in shuffledQuestions
             h3= question.question
-            
-            form(method='post' action='score')
-                - const shuffledAnswers = [question.correct_answer, question.incorrect_answer_1, question.incorrect_answer_2, question.incorrect_answer_3].sort(() => 0.5 - Math.random())
-                each answer in shuffledAnswers
-                    input(required type='radio', name=`question-${question.id}`, value=answer)
-                    label(for=`answerInput${answer}`) #{answer}
-                    br
+            - const shuffledAnswers = [question.correct_answer, question.incorrect_answer_1, question.incorrect_answer_2, question.incorrect_answer_3].sort(() => 0.5 - Math.random())
+            each answer in shuffledAnswers
+                input(required type='radio', name=`${question.question}`, value=answer)
+                label #{answer}
                 br
-        input(value='Submit Answer' type='submit')
+        br
+        input(type='submit')
+

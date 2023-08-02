@@ -2,3 +2,18 @@ extends layout
 
 block content
   h1 Score
+  h2 Your Answers:
+  each answer in userAnswers
+    p Question: #{answer.question}
+    p Your Answer: #{answer.answer}.
+  h2 Correct Answers:
+  - let score = 0
+  - for (let i = 0; i < Math.min(5, shuffledQuestions.length); i++)
+    - const question = shuffledQuestions[i]
+    - if (userAnswers[i] && userAnswers[i].answer === question.correct_answer)
+      p Question #{i + 1}: #{question.correct_answer} (Correct)
+      - score++
+    - else
+      p Question #{i + 1}: #{question.correct_answer} (Incorrect)
+
+  p Your score: #{score} out of #{Math.min(5, shuffledQuestions.length)}

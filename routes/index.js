@@ -24,11 +24,4 @@ router.get('/leaderboard', function(req, res, next) {
   res.render('leaderboard', { title: 'Time 4 Trivia', user: req.session.user, isAdmin: req.cookies.isAdmin, leaders: leaders });
 });
 
-router.get('/score', function(req, res, next) {
-  // TODO: Get actual leader data from the MONGO database!
-  
-
-  res.render('score', { title: 'Scoreboard', user: req.session.user, isAdmin: req.cookies.isAdmin, score: score });
-});
-
 module.exports = router;
