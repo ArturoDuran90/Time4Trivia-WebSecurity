@@ -5,9 +5,9 @@ const STATUS_CODES = require('../models/statusCodes').STATUS_CODES;
 
 const mysql = require('mysql2/promise');
 const sqlConfig = {
-    host: 'localhost',
-    user: 'dev',
-    password: 'dev',
+    host: '10.0.30.152',
+    user: 'student_t5',
+    password: 'MdyOOiYnZiFRmwPVJrQKtJSL',
     database: 'Time4Trivia',
     multipleStatements: true
 };
