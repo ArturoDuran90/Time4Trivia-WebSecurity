@@ -1,7 +1,9 @@
 extends layout
 
 block content
-  h1 Score
+  h1 #{title}
+  if error != ''
+    label(class='error') #{error}
   h2 Your Answers:
   each answer in userAnswers
     p Question: #{answer.question}
@@ -16,4 +18,4 @@ block content
     - else
       p Question #{i + 1}: #{question.correct_answer} (Incorrect)
 
-  p Your score: #{score} out of #{Math.min(5, shuffledQuestions.length)}
+  h1 --- Your score: <u><i>#{score}</i></u> out of #{Math.min(5, shuffledQuestions.length)} ---

@@ -5,10 +5,10 @@ const STATUS_CODES = require('../models/statusCodes').STATUS_CODES;
 
 const mysql = require('mysql2/promise');
 const sqlConfig = {
-    host: '10.0.30.152',
-    user: 'student_t5',
-    password: 'MdyOOiYnZiFRmwPVJrQKtJSL',
-    database: 'Time4Trivia',
+    host: 'localhost',
+    user: 'root',
+    password: 'Nu191036673',
+    database: 'time4trivia',
     multipleStatements: true
 };
 
@@ -341,3 +341,53 @@ exports.getQuestions = async function () {
 
     return result;
 }
+
+// /**
+//  * Create a score in the database.
+//  * @param {number} userId - The ID of the user.
+//  * @param {number} score - The score to be saved.
+//  * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+//  */
+// exports.createScore = async function (userId, score) {
+//     let result = {};
+//     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+
+//     try {
+//         const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+
+//         result = await con.query(sql);
+//         result = result[0]; // Returning the result of the query
+//     } catch (err) {
+//         console.log(err);
+//         throw err; // Re-throw the error to handle it at a higher level
+//     } finally {
+//         con.end(); // Close the connection in the end, whether the operation succeeds or fails
+//     }
+//     return result;
+// };
+
+/**
+ * @returns and array of scores
+ */
+exports.getScores = async function () {
+    let result = {};
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT * from leaderboard;`;
+
+        result = await con.query(sql);
+
+        result = result[0];
+
+        //console.log("DAL Questions:", result);
+    } catch (err) {
+        console.log(err);
+    }finally{
+        con.end();
+    }
+
+    return result;
+}
+
