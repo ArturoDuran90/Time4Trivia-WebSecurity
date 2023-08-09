@@ -7,7 +7,7 @@ const mysql = require('mysql2/promise');
 const sqlConfig = {
     host: '10.0.30.152',
     user: 'student_t5',
-    password: 'MdyOOiYnZiFRmwPVJrQKtJSL',
+    password: 'br[QloOj<Ia_E?g!x-4alsW!E',
     database: 'Time4Trivia',
     multipleStatements: true
 };
