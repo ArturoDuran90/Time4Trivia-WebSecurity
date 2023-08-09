@@ -342,29 +342,34 @@ exports.getQuestions = async function () {
     return result;
 }
 
-// /**
-//  * Create a score in the database.
-//  * @param {number} userId - The ID of the user.
-//  * @param {number} score - The score to be saved.
-//  * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
-//  */
-// exports.createScore = async function (userId, score) {
-//     let result = {};
-//     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+/**
+ * Create a score in the database.
+ * @param {number} userId - The ID of the user.
+ * @param {number} score - The score to be saved.
+ * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+ */
+exports.createScore = async function (userId, score) {
+    let result = new Result();
+    const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
-//     try {
-//         const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+    try {
+        const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
 
-//         result = await con.query(sql);
-//         result = result[0]; // Returning the result of the query
-//     } catch (err) {
-//         console.log(err);
-//         throw err; // Re-throw the error to handle it at a higher level
-//     } finally {
-//         con.end(); // Close the connection in the end, whether the operation succeeds or fails
-//     }
-//     return result;
-// };
+        await con.query(sql);
+
+        result.status = STATUS_CODES.success;
+        result.message = 'Score added to db.';
+        return result;
+    } catch (err) {
+        console.log(err);
+
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    }finally{
+        con.end();
+    }
+};
 
 /**
  * @returns and array of scores
@@ -375,7 +380,10 @@ exports.getScores = async function () {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `SELECT * from leaderboard;`;
+        let sql = `SELECT u.Username, t.score
+                    FROM leaderboard AS t
+                    JOIN users AS u ON t.userId = u.userId
+                    ORDER BY t.score DESC;`;
 
         result = await con.query(sql);
 

@@ -7,11 +7,4 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Time 4 Trivia', user: req.session.user, isAdmin: req.cookies.isAdmin });
 });
 
-router.get('/leaderboard', function(req, res, next) {
-  // TODO: Get actual leader data from the MONGO database!
-  var leaders = [];
-
-  res.render('leaderboard', {user: req.session.user, isAdmin: req.cookies.isAdmin, leaders: leaders });
-});
-
 module.exports = router;

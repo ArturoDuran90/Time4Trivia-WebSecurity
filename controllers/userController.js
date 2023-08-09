@@ -135,13 +135,13 @@ exports.getQuestions = async function (){
     return await sqlDAL.getQuestions();
 }
 
-// /**
-//  * 
-//  * @returns created Score as JSON object
-//  */
-// exports.createScore = async function (userId, score) {
-//     return await sqlDAL.createScore(userId, score);
-// }
+/**
+ * 
+ * @returns created Score as JSON object
+ */
+exports.createScore = async function (userId, score) {
+    return await sqlDAL.createScore(userId, score);
+}
 
 /**
  * 
