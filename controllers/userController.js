@@ -150,3 +150,11 @@ exports.createScore = async function (userId, score) {
 exports.getScores = async function (){
     return await sqlDAL.getScores();
 }
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.createQuestion = async function (question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
+    return await sqlDAL.createQuestion(question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3);
+}

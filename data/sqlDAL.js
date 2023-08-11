@@ -399,3 +399,34 @@ exports.getScores = async function () {
     return result;
 }
 
+/**
+ * Create a score in the database.
+ * @param {text} question - The Question.
+ * @param {text} correctAnswer - The Correct answer to the question.
+ * @param {text} incorrectAnwer1 - The Incorrect Answer1 to the question.
+ * @param {text} incorrectAnwer2 - The Incorrect Answer2 to the question.
+ * @param {text} incorrectAnwer3 - The Incorrect Answer3 to the question.
+ * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+ */
+exports.createQuestion = async function (question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3) {
+    let result = new Result();
+    const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+
+    try {
+        const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}')`;
+
+        await con.query(sql);
+
+        result.status = STATUS_CODES.success;
+        result.message = 'Question added to db.';
+        return result;
+    } catch (err) {
+        console.log(err);
+
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    }finally{
+        con.end();
+    }
+};
