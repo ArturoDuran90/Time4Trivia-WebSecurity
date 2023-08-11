@@ -326,7 +326,7 @@ exports.getQuestions = async function () {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `SELECT * from triviaquestions;`;
+        let sql = `SELECT * FROM triviaquestions WHERE isVerified=true;`;
 
         result = await con.query(sql);
 
@@ -341,3 +341,144 @@ exports.getQuestions = async function () {
 
     return result;
 }
+
+/**
+ * Create a score in the database.
+ * @param {number} userId - The ID of the user.
+ * @param {number} score - The score to be saved.
+ * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+ */
+exports.createScore = async function (userId, score) {
+    let result = new Result();
+    const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+
+    try {
+        const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+
+        await con.query(sql);
+
+        result.status = STATUS_CODES.success;
+        result.message = 'Score added to db.';
+        return result;
+    } catch (err) {
+        console.log(err);
+
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    }finally{
+        con.end();
+    }
+};
+
+/**
+ * @returns and array of scores
+ */
+exports.getScores = async function () {
+    let result = {};
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT u.Username, t.score
+                    FROM leaderboard AS t
+                    JOIN users AS u ON t.userId = u.userId
+                    ORDER BY t.score DESC;`;
+
+        result = await con.query(sql);
+
+        result = result[0];
+
+        //console.log("DAL Questions:", result);
+    } catch (err) {
+        console.log(err);
+    }finally{
+        con.end();
+    }
+
+    return result;
+}
+
+/**
+ * Create a score in the database.
+ * @param {text} question - The Question.
+ * @param {text} correctAnswer - The Correct answer to the question.
+ * @param {text} incorrectAnwer1 - The Incorrect Answer1 to the question.
+ * @param {text} incorrectAnwer2 - The Incorrect Answer2 to the question.
+ * @param {text} incorrectAnwer3 - The Incorrect Answer3 to the question.
+ * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+ */
+exports.createQuestion = async function (question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3) {
+    let result = new Result();
+    const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+
+    try {
+        const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
+
+        await con.query(sql);
+
+        result.status = STATUS_CODES.success;
+        result.message = 'Question added to db.';
+        return result;
+    } catch (err) {
+        console.log(err);
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    }finally{
+        con.end();
+    }
+};
+
+/**
+ * @returns and array of scores
+ */
+exports.getQuestionsToVerify = async function () {
+    let result = {};
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT * FROM triviaquestions WHERE isVerified=false;`;
+
+        result = await con.query(sql);
+
+        result = result[0];
+    } catch (err) {
+        console.log(err);
+    }finally{
+        con.end();
+    }
+    return result;
+}
+
+/**
+ * Create a score in the database.
+ * @param {text} question - The Question.
+ * @param {text} correctAnswer - The Correct answer to the question.
+ * @param {text} incorrectAnwer1 - The Incorrect Answer1 to the question.
+ * @param {text} incorrectAnwer2 - The Incorrect Answer2 to the question.
+ * @param {text} incorrectAnwer3 - The Incorrect Answer3 to the question.
+ * @returns {Promise<object>} - A Promise resolving to the result of the database operation.
+ */
+exports.submitQuestionsToVerify = async function (questionId) {
+    let result = new Result();
+    const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
+
+    try {
+        const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
+
+        await con.query(sql);
+
+        result.status = STATUS_CODES.success;
+        result.message = 'Question verified to db.';
+        return result;
+    } catch (err) {
+        console.log(err);
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    }finally{
+        con.end();
+    }
+};

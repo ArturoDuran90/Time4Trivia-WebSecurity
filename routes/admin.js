@@ -24,4 +24,23 @@ router.get('/delete/:userId', async function (req, res, next) {
   res.redirect('/');
 });
 
+router.get('/verifyQuestions', async function(req, res, next) {
+  if (!req.cookies.isAdmin) {
+    res.redirect('/');
+  } else {
+    let questionsToVerify = await userController.getQuestionsToVerify();
+    res.render('verifyQuestion', {title: "Questions to Verify", user: req.session.user , questionsToVerify: questionsToVerify});
+  }
+});
+
+router.post('/verifyQuestions', async function(req, res, next) {
+  if (!req.cookies.isAdmin) {
+    res.redirect('/');
+  } else {
+    let questionId = req.body.questionId; //get question id
+    await userController.submitQuestionsToVerify(questionId);
+    res.redirect('/');
+  }
+});
+
 module.exports = router;

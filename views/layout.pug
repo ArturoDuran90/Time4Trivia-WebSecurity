@@ -6,11 +6,13 @@ html
   body
     nav
       a(class='', href='/') Home
-      a(class='bn', href='/leaderboard') Leaderboard
       if user
         if isAdmin == 'yes'
           a(class='', href='/a/users/user') Users
+          a(class='', href='/a/verifyQuestions') Questions to verify
         a(class='', href='/g/play') Play
+        a(class='', href='/g/create') Create Questions
+        a(class='', href='/g/leaderboard') Leaderboard
         a(class='', href='/u/profile') Profile
         a(class='', href='/u/logout') Logout #{user.username}   
       else

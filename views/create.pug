@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1 #{title}
+    if error != ''
+        label(class='error') #{error}
+    form(action='/g/create', method='post')
+        label Question:
+        input(required type='text', name='question')
+        br
+        label Correct Answer:
+        input(required type='text', name='correctAnswer')
+        br
+        label Incorrect Answer 1:
+        input(required type='text', name='incorrectAnswer1')
+        br
+        label Incorrect Answer 2:
+        input(required type='text', name='incorrectAnswer2')
+        br
+        label Incorrect Answer 3:
+        input(required type='text', name='incorrectAnswer3')
+        br
+        input(type='submit', value='Create Question')
+

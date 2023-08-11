@@ -134,3 +134,43 @@ exports.deleteUserById = function (userId) {
 exports.getQuestions = async function (){
     return await sqlDAL.getQuestions();
 }
+
+/**
+ * 
+ * @returns created Score as JSON object
+ */
+exports.createScore = async function (userId, score) {
+    return await sqlDAL.createScore(userId, score);
+}
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.getScores = async function (){
+    return await sqlDAL.getScores();
+}
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.createQuestion = async function (question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
+    return await sqlDAL.createQuestion(question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3);
+}
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.getQuestionsToVerify = async function (){
+    return await sqlDAL.getQuestionsToVerify();
+}
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.submitQuestionsToVerify = async function (questionId){
+    return await sqlDAL.submitQuestionsToVerify(questionId);
+}

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 #{title}
+  #verifySection
+    form(method='post' action='verifyQuestions')
+      each question in questionsToVerify
+        label ID:
+        label #{question.id}
+        br
+        label Question:
+        label #{question.question}
+        br
+        label Correct Answer:
+        label #{question.correct_answer}
+        br
+        label Incorrect Answer 1:
+        label #{question.incorrect_answer_1}
+        br
+        label Incorrect Answer 2:
+        label #{question.incorrect_answer_2}
+        br
+        label Incorrect Answer 3:
+        label #{question.incorrect_answer_3}
+        br
+        label Verify question with ID of 
+        input(type='submit' name='questionId', value=question.id)
+        br
+        hr
