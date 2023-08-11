@@ -31,9 +31,8 @@ exports.getAllUsers = async function () {
         for(key in userResults){
             let u = userResults[key];
 
-            let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
             console.log(sql);
-            const [roleResults, ] = await con.query(sql);
+            const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             // console.log('getAllUsers: role results');
             // console.log(roleResults);
@@ -65,7 +64,7 @@ exports.getAllUsers = async function () {
     try {
         let sql = `select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = '${role}'`;
 
-        const [userResults, ] = await con.query(sql);
+        const [userResults, ] = await con.query('select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = ?',[role]);
 
         // console.log('getAllUsers: user results');
         // console.log(userResults);
@@ -75,7 +74,7 @@ exports.getAllUsers = async function () {
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
             console.log(sql);
-            const [roleResults, ] = await con.query(sql);
+            const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?' [u.userId]);
 
             // console.log('getAllUsers: role results');
             // console.log(roleResults);
@@ -108,14 +107,14 @@ exports.getUserById = async function (userId) {
     try {
         let sql = `select * from Users where UserId = ${userId}`;
         
-        const [userResults, ] = await con.query(sql);
+        const [userResults, ] = await con.query('select * from Users where UserId = ?', [userId]);
 
         for(key in userResults){
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
             console.log(sql);
-            const [roleResults, ] = await con.query(sql);
+            const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             let roles = [];
             for(key in roleResults){
@@ -140,11 +139,11 @@ exports.deleteUserById = async function (userId) {
 
     try {
         let sql = `delete from UserRoles where UserId = ${userId}`;
-        let result = await con.query(sql);
+        let result = await con.query('delete from UserRoles where UserId = ?' [userId]);
         // console.log(result);
 
         sql = `delete from Users where UserId = ${userId}`;
-        result = await con.query(sql);
+        result = await con.query('delete from Users where UserId = ?', [userId]);
         // console.log(result);
 
         result.status = STATUS_CODES.success;
@@ -238,7 +237,7 @@ exports.createUser = async function (username, hashedPassword, email, firstName,
 
     try {
         let sql = `insert into Users (Username, Email, Password, FirstName, LastName) values ('${username}', '${email}', '${hashedPassword}', '${firstName}', '${lastName}')`;
-        const userResult = await con.query(sql);
+        const userResult = await con.query('insert into Users (Username, Email, Password, FirstName, LastName) values (?, ?, ?, ?, ?)', [username, email, hashedPassword, firstName, lastName]);
 
         let newUserId = userResult[0].insertId;
 
@@ -273,7 +272,7 @@ exports.updateUserPassword = async function (userId, hashedPassword) {
 
     try {
         let sql = `update Users set password = '${hashedPassword}' where userId = '${userId}'`;
-        const userResult = await con.query(sql);
+        const userResult = await con.query('update Users set password = ? where userId = ?', [hashedPassword, userId]) ;
 
         // console.log(r);
         result.status = STATUS_CODES.success;
@@ -302,7 +301,7 @@ exports.updateProfile = async function (userId, firstName, lastName) {
 
     try {
         let sql = `update Users set firstName = '${firstName}', lastName = '${lastName}' where userId = '${userId}'`;
-        const userResult = await con.query(sql);
+        const userResult = await con.query('update Users set firstName = ?, lastName = ? where userId = ?', [firstName, lastName, userId]);
 
         // console.log(r);
         result.status = STATUS_CODES.success;
@@ -355,7 +354,7 @@ exports.createScore = async function (userId, score) {
     try {
         const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
 
-        await con.query(sql);
+        await con.query('INSERT INTO leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
 
         result.status = STATUS_CODES.success;
         result.message = 'Score added to db.';
@@ -415,7 +414,7 @@ exports.createQuestion = async function (question, correctAnswer, incorrectAnswe
     try {
         const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
 
-        await con.query(sql);
+        await con.query('INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES (?, ?, ?, ?, ?, false)', [question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3]);
 
         result.status = STATUS_CODES.success;
         result.message = 'Question added to db.';
@@ -468,7 +467,7 @@ exports.submitQuestionsToVerify = async function (questionId) {
     try {
         const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
 
-        await con.query(sql);
+        await con.query('UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ?;', [questionId]);
 
         result.status = STATUS_CODES.success;
         result.message = 'Question verified to db.';
