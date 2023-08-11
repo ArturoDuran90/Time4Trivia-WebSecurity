@@ -4,7 +4,6 @@ const userController = require('../controllers/userController');
 const STATUS_CODES = require('../models/statusCodes').STATUS_CODES;
 
 var shuffledQuestions = "";
-var userScore = 0;
 
 router.get('/play', async function(req, res, next) {
   if (!req.session.user || !req.cookies.isAdmin) {
@@ -16,10 +15,10 @@ router.get('/play', async function(req, res, next) {
 
     res.render('play', {user: req.session.user , shuffledQuestions: shuffledQuestions});
   }
-  
 });
 
 router.post('/score', async function(req, res, next) {
+  var userScore = 0;
   if (!req.session.user || !req.cookies.isAdmin) {
     res.redirect('/');
   } else {
@@ -96,7 +95,5 @@ router.post('/create', async function (req, res, next) {
     }
   }
 });
-
-
 
 module.exports = router;

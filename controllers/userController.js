@@ -158,3 +158,19 @@ exports.getScores = async function (){
 exports.createQuestion = async function (question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
     return await sqlDAL.createQuestion(question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3);
 }
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.getQuestionsToVerify = async function (){
+    return await sqlDAL.getQuestionsToVerify();
+}
+
+/**
+ * 
+ * @returns scores as JSON object
+ */
+exports.submitQuestionsToVerify = async function (questionId){
+    return await sqlDAL.submitQuestionsToVerify(questionId);
+}
