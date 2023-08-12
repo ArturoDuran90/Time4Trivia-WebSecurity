@@ -4,17 +4,18 @@ html
     title= title
     link(rel='stylesheet', href='/css/style.css')
   body
+    h1 Time 4 Trivia
     nav
-      a(class='', href='/') Home
+      a(class='navLink', href='/') Home
       if user
         if isAdmin == 'yes'
-          a(class='', href='/a/users/user') Users
-          a(class='', href='/a/verifyQuestions') Questions to verify
-        a(class='', href='/g/play') Play
-        a(class='', href='/g/create') Create Questions
-        a(class='', href='/g/leaderboard') Leaderboard
-        a(class='', href='/u/profile') Profile
-        a(class='', href='/u/logout') Logout #{user.username}   
+          a(class='navLink', href='/a/users/user') Users
+          a(class='navLink', href='/a/verifyQuestions') Questions to verify
+        a(class='navLink', href='/g/play') Play
+        a(class='navLink', href='/g/create') Create Questions
+        a(class='navLink', href='/g/leaderboard') Leaderboard
+        a(class='navLink', href='/u/profile') Profile
+        a(class='navLink', href='/u/logout') Logout #{user.username}   
       else
-        a(class='', href='/u/login') Login
+        a(class='navLink', href='/u/login') Login
     block content

@@ -23,7 +23,7 @@ block content
         label Incorrect Answer 3:
         label #{question.incorrect_answer_3}
         br
-        label Verify question with ID of 
-        input(type='submit' name='questionId', value=question.id)
+        label#verifyBtn Verify question with ID of 
+        input(class='verifyBtn' type='submit' name='questionId', value=question.id)
         br
         hr

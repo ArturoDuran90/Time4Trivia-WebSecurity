@@ -2,34 +2,37 @@ extends layout
 
 block content
   h1 Profile
-  label Your Username: #{user.username}
+  label(class='profile-label') Your Username: #{user.username}
   br
-  img(src="/images/defaultProfile.png", class="profileImg")
+  img(src="/images/defaultProfile.png", class="profile-img")
   br
   if error != ''
     label(class='error') #{error}
   if msg != ''
     label(class='msg') #{msg}
-  h2 Update your profile 
-  form(action='profile', method='post')
-    label First Name:
-    input(type='text', name='firstName', value=user.firstName)
-    <br>
-    label Last Name:
-    input(type='text', name='lastName', value=user.lastName)
-    <br>
-    input(type='submit', value='Update Profile')
-  if pwdError != ''
-    label(class='error') #{pwdError}
-  h2 Change your password
-  form(action='updatePassword', method='post')
-    label Current Password:
-    input(type='password', name='currentPassword')
-    <br>
-    label New Password:
-    input(type='password', name='newPassword')
-    <br>
-    label Confirm Password:
-    input(type='password', name='confirmPassword')
-    <br>
-    input(type='submit', value='Update Password')
+  div#profilePageMainContainer
+    div#profilePageLeft
+      h2 Update your profile
+      form(action='profile', method='post', class='profile-form')
+        label(for='firstName') First Name:
+        input(type='text', name='firstName', value=user.firstName, id='firstName')
+        <br>
+        label(for='lastName') Last Name:
+        input(type='text', name='lastName', value=user.lastName, id='lastName')
+        <br>
+        input(type='submit', value='Update Profile', class='submit-button')
+      if pwdError != ''
+        label(class='error') #{pwdError}
+    div#profilePageRight
+      h2 Change your password
+      form(action='updatePassword', method='post', class='password-form')
+        label(for='currentPassword') Current Password:
+        input(type='password', name='currentPassword', id='currentPassword')
+        <br>
+        label(for='newPassword') New Password:
+        input(type='password', name='newPassword', id='newPassword')
+        <br>
+        label(for='confirmPassword') Confirm Password:
+        input(type='password', name='confirmPassword', id='confirmPassword')
+        <br>
+        input(type='submit', value='Update Password', class='submit-button')

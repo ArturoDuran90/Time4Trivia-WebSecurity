@@ -31,7 +31,7 @@ exports.getAllUsers = async function () {
         for(key in userResults){
             let u = userResults[key];
 
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             // console.log('getAllUsers: role results');
@@ -64,7 +64,7 @@ exports.getAllUsers = async function () {
     try {
         let sql = `select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = '${role}'`;
 
-        const [userResults, ] = await con.query('select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = ?',[role]);
+        const [userResults, ] = await con.query(sql);
 
         // console.log('getAllUsers: user results');
         // console.log(userResults);
@@ -73,8 +73,8 @@ exports.getAllUsers = async function () {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
-            const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?' [u.userId]);
+            //console.log(sql);
+            const [roleResults, ] = await con.query(sql);
 
             // console.log('getAllUsers: role results');
             // console.log(roleResults);
@@ -113,7 +113,7 @@ exports.getUserById = async function (userId) {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             let roles = [];
@@ -170,7 +170,7 @@ exports.getUserByUsername = async function (username) {
 
     try {
         let sql = `select * from Users where Username = '${username}'`;
-        console.log(sql);
+        //console.log(sql);
         
         const [userResults, ] = await con.query(sql);
 
@@ -178,7 +178,7 @@ exports.getUserByUsername = async function (username) {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query(sql);
 
             let roles = [];
@@ -382,7 +382,8 @@ exports.getScores = async function () {
         let sql = `SELECT u.Username, t.score
                     FROM leaderboard AS t
                     JOIN users AS u ON t.userId = u.userId
-                    ORDER BY t.score DESC;`;
+                    ORDER BY t.score DESC
+                    LIMIT 10;`;
 
         result = await con.query(sql);
 

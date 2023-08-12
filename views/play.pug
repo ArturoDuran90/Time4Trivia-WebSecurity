@@ -2,14 +2,14 @@ extends layout
 
 block content
     h1 Play Time 4 Trivia!
-    form(method='post' action='score')
+    form(method='post', action='score', class='trivia-form')
         each question in shuffledQuestions
             h3= question.question
             - const shuffledAnswers = [question.correct_answer, question.incorrect_answer_1, question.incorrect_answer_2, question.incorrect_answer_3].sort(() => 0.5 - Math.random())
             each answer in shuffledAnswers
-                input(required type='radio', name=`${question.question}`, value=answer)
-                label #{answer}
+                label(class='answer-label')
+                    input(required type='radio', name=`${question.question}`, value=answer, class='answer-input')
+                    span(class='answer-text') #{answer}
                 br
         br
-        input(type='submit')
-
+        input(type='submit', value='Submit Answers', class='submit-button')
