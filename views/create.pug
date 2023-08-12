@@ -4,21 +4,20 @@ block content
     h1 #{title}
     if error != ''
         label(class='error') #{error}
-    form(action='/g/create', method='post')
+    form(action='/g/create', method='post', class='question-form')
         label Question:
-        input(required type='text', name='question')
+        input(required type='text', name='question', class='input-field')
         br
         label Correct Answer:
-        input(required type='text', name='correctAnswer')
+        input(required type='text', name='correctAnswer', class='input-field')
         br
         label Incorrect Answer 1:
-        input(required type='text', name='incorrectAnswer1')
+        input(required type='text', name='incorrectAnswer1', class='input-field')
         br
         label Incorrect Answer 2:
-        input(required type='text', name='incorrectAnswer2')
+        input(required type='text', name='incorrectAnswer2', class='input-field')
         br
         label Incorrect Answer 3:
-        input(required type='text', name='incorrectAnswer3')
+        input(required type='text', name='incorrectAnswer3', class='input-field')
         br
-        input(type='submit', value='Create Question')
-
+        input(type='submit', value='Create Question', class='submit-button')
