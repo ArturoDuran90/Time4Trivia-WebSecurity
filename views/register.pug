@@ -4,7 +4,7 @@ block content
     h1 Register
     if error != ''
         label(class='error') #{error}
-    form(action='/u/register', method='post')
+    form(action='/u/register', method='post', class='register-form')
         label Username:
         input(required type='text', name='username')
         br
@@ -20,4 +20,4 @@ block content
         label Password:
         input(required type='password', name='password')
         br
-        input(type='submit', value='register')
+        input(type='submit', value='Register', class='submit-button')

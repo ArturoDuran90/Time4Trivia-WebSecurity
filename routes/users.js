@@ -18,12 +18,16 @@ router.post('/register', async function (req, res, next) {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let password = req.body.password;
+  let createUserResult;
+  let verifyUserResult;
 
   if( typeof username != "string" ||typeof email != "string" ||typeof firstName != "string" ||typeof lastName != "string" ||typeof password != "string" ){
     res.render('register', { title: 'Time 4 Trivia', error: 'Invalid login' })
   }else{
-      result = await userController.createUser(username, email, firstName, lastName, password);
+      let result = await userController.createUser(username, email, firstName, lastName, password);
   }
+
+
 
   if (result?.status == STATUS_CODES.success) {
     res.redirect('/u/login');

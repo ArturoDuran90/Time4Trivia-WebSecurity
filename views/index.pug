@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 Welcome
   if user
-    p You are logged in as: #{user.username}
+    h3 You are logged in as: #{user.username}
+    span#emoji &#128527;
     if isAdmin == 'yes'
-      p You are an Admin!
+      h3 You are an Admin!
   else
-    p Please #[a(href="/u/login") login] to play
+    h3 Please login to play
+    span#emoji &#128528;

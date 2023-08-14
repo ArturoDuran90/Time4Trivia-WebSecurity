@@ -31,7 +31,7 @@ exports.getAllUsers = async function () {
         for(key in userResults){
             let u = userResults[key];
 
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             // console.log('getAllUsers: role results');
@@ -64,7 +64,7 @@ exports.getAllUsers = async function () {
     try {
         let sql = `select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = '${role}'`;
 
-        const [userResults, ] = await con.query('select * from Users u join UserRoles ur on u.userid = ur.userId join Roles r on ur.roleId = r.roleId where r.role = ?',[role]);
+        const [userResults, ] = await con.query(sql);
 
         // console.log('getAllUsers: user results');
         // console.log(userResults);
@@ -73,8 +73,8 @@ exports.getAllUsers = async function () {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
-            const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?' [u.userId]);
+            //console.log(sql);
+            const [roleResults, ] = await con.query(sql);
 
             // console.log('getAllUsers: role results');
             // console.log(roleResults);
@@ -105,7 +105,7 @@ exports.getUserById = async function (userId) {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `select * from Users where UserId = ${userId}`;
+        //let sql = `select * from Users where UserId = ${userId}`;
         
         const [userResults, ] = await con.query('select * from Users where UserId = ?', [userId]);
 
@@ -113,7 +113,7 @@ exports.getUserById = async function (userId) {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query('select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ?', [u.userId]);
 
             let roles = [];
@@ -138,7 +138,7 @@ exports.deleteUserById = async function (userId) {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `delete from UserRoles where UserId = ${userId}`;
+        //let sql = `delete from UserRoles where UserId = ${userId}`;
         let result = await con.query('delete from UserRoles where UserId = ?' [userId]);
         // console.log(result);
 
@@ -170,7 +170,7 @@ exports.getUserByUsername = async function (username) {
 
     try {
         let sql = `select * from Users where Username = '${username}'`;
-        console.log(sql);
+        //console.log(sql);
         
         const [userResults, ] = await con.query(sql);
 
@@ -178,7 +178,7 @@ exports.getUserByUsername = async function (username) {
             let u = userResults[key];
 
             let sql = `select UserId, Role from UserRoles ur join Roles r on ur.roleid = r.roleid where ur.UserId = ${u.UserId}`;
-            console.log(sql);
+            //console.log(sql);
             const [roleResults, ] = await con.query(sql);
 
             let roles = [];
@@ -236,12 +236,12 @@ exports.createUser = async function (username, hashedPassword, email, firstName,
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `insert into Users (Username, Email, Password, FirstName, LastName) values ('${username}', '${email}', '${hashedPassword}', '${firstName}', '${lastName}')`;
+        //let sql = `insert into Users (Username, Email, Password, FirstName, LastName) values ('${username}', '${email}', '${hashedPassword}', '${firstName}', '${lastName}')`;
         const userResult = await con.query('insert into Users (Username, Email, Password, FirstName, LastName) values (?, ?, ?, ?, ?)', [username, email, hashedPassword, firstName, lastName]);
 
         let newUserId = userResult[0].insertId;
 
-        sql = `insert into UserRoles (UserId, RoleId) values (${newUserId}, 1)`;
+        let sql = `insert into UserRoles (UserId, RoleId) values (${newUserId}, 1)`;
         await con.query(sql);
 
         result.status = STATUS_CODES.success;
@@ -255,6 +255,45 @@ exports.createUser = async function (username, hashedPassword, email, firstName,
         result.message = err.message;
         return result;
     }finally{
+        con.end();
+    }
+}
+
+/**
+ * @param {*} username 
+ * @param {*} email 
+ * @returns a result object with status/message
+ */
+exports.checkIfUsersExist = async function (username, email) {
+    let result = new Result();
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT * 
+                    FROM users
+                    WHERE 
+                    Username = '${username}' OR 
+                    Email = '${email}';`;
+
+        const queryResult = await con.query(sql);
+
+        if (queryResult.length === 0) {
+            result.status = STATUS_CODES.success;
+            result.message = 'No matching users found.';
+        } else {
+            result.status = STATUS_CODES.failure;
+            result.message = 'Matching users found.';
+        }
+
+        return result;
+    } catch (err) {
+        console.log(err);
+
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    } finally {
         con.end();
     }
 }
@@ -352,9 +391,9 @@ exports.createScore = async function (userId, score) {
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+        //const sql = `INSERT INTO Leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
 
-        await con.query('INSERT INTO leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
+        await con.query('INSERT INTO Leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
 
         result.status = STATUS_CODES.success;
         result.message = 'Score added to db.';
@@ -380,9 +419,10 @@ exports.getScores = async function () {
 
     try {
         let sql = `SELECT u.Username, t.score
-                    FROM leaderboard AS t
-                    JOIN users AS u ON t.userId = u.userId
-                    ORDER BY t.score DESC;`;
+                    FROM Leaderboard AS t
+                    JOIN Users AS u ON t.userId = u.userId
+                    ORDER BY t.score DESC
+                    LIMIT 10;`;
 
         result = await con.query(sql);
 
@@ -412,7 +452,7 @@ exports.createQuestion = async function (question, correctAnswer, incorrectAnswe
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
+        //const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
 
         await con.query('INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES (?, ?, ?, ?, ?, false)', [question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3]);
 
@@ -465,7 +505,7 @@ exports.submitQuestionsToVerify = async function (questionId) {
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
+        //const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
 
         await con.query('UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ?;', [questionId]);
 

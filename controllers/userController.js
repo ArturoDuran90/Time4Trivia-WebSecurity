@@ -34,6 +34,21 @@ exports.createUser = async function (username, email, firstName, lastName, passw
 
 /**
  * 
+ * @param {*} username 
+ * @param {*} email 
+ * @param {*} firstName 
+ * @param {*} lastName 
+ * @returns a Result with status/message and the new user id as data
+ */
+exports.checkIfUsersExist = async function (username, email) {
+
+    let result = await sqlDAL.checkIfUsersExist(username, email);
+
+    return result;
+}
+
+/**
+ * 
  * @param {*} userId 
  * @param {*} firstName 
  * @param {*} lastName

@@ -25,16 +25,16 @@ router.get('/delete/:userId', async function (req, res, next) {
 });
 
 router.get('/verifyQuestions', async function(req, res, next) {
-  if (!req.cookies.isAdmin) {
+  if (!req.session.user || !req.cookies.isAdmin) {
     res.redirect('/');
   } else {
     let questionsToVerify = await userController.getQuestionsToVerify();
-    res.render('verifyQuestion', {title: "Questions to Verify", user: req.session.user , questionsToVerify: questionsToVerify});
+    res.render('verifyQuestion', {title: "Questions to Verify", user: req.session.user, isAdmin: req.cookies.isAdmin, questionsToVerify: questionsToVerify});
   }
 });
 
 router.post('/verifyQuestions', async function(req, res, next) {
-  if (!req.cookies.isAdmin) {
+  if (!req.session.user || !req.cookies.isAdmin) {
     res.redirect('/');
   } else {
     let questionId = req.body.questionId; //get question id
