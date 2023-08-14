@@ -11,7 +11,7 @@ router.get('/register', function (req, res, next) {
 
 router.post('/register', async function (req, res, next) {
 
-
+  let result
 
   let username = req.body.username;
   let email = req.body.email;
@@ -22,10 +22,8 @@ router.post('/register', async function (req, res, next) {
   if( typeof username != "string" ||typeof email != "string" ||typeof firstName != "string" ||typeof lastName != "string" ||typeof password != "string" ){
     res.render('register', { title: 'Time 4 Trivia', error: 'Invalid login' })
   }else{
-      let result = await userController.createUser(username, email, firstName, lastName, password);
+      result = await userController.createUser(username, email, firstName, lastName, password);
   }
-
-
 
   if (result?.status == STATUS_CODES.success) {
     res.redirect('/u/login');
