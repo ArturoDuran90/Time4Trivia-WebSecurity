@@ -105,7 +105,7 @@ exports.getUserById = async function (userId) {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `select * from Users where UserId = ${userId}`;
+        //let sql = `select * from Users where UserId = ${userId}`;
         
         const [userResults, ] = await con.query('select * from Users where UserId = ?', [userId]);
 
@@ -138,7 +138,7 @@ exports.deleteUserById = async function (userId) {
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `delete from UserRoles where UserId = ${userId}`;
+        //let sql = `delete from UserRoles where UserId = ${userId}`;
         let result = await con.query('delete from UserRoles where UserId = ?' [userId]);
         // console.log(result);
 
@@ -236,12 +236,12 @@ exports.createUser = async function (username, hashedPassword, email, firstName,
     const con = await mysql.createConnection(sqlConfig);
 
     try {
-        let sql = `insert into Users (Username, Email, Password, FirstName, LastName) values ('${username}', '${email}', '${hashedPassword}', '${firstName}', '${lastName}')`;
+        //let sql = `insert into Users (Username, Email, Password, FirstName, LastName) values ('${username}', '${email}', '${hashedPassword}', '${firstName}', '${lastName}')`;
         const userResult = await con.query('insert into Users (Username, Email, Password, FirstName, LastName) values (?, ?, ?, ?, ?)', [username, email, hashedPassword, firstName, lastName]);
 
         let newUserId = userResult[0].insertId;
 
-        sql = `insert into UserRoles (UserId, RoleId) values (${newUserId}, 1)`;
+        let sql = `insert into UserRoles (UserId, RoleId) values (${newUserId}, 1)`;
         await con.query(sql);
 
         result.status = STATUS_CODES.success;
@@ -391,7 +391,7 @@ exports.createScore = async function (userId, score) {
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `INSERT INTO Leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+        //const sql = `INSERT INTO Leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
 
         await con.query('INSERT INTO Leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
 
@@ -452,7 +452,7 @@ exports.createQuestion = async function (question, correctAnswer, incorrectAnswe
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
+        //const sql = `INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}', '${incorrectAnswer2}', '${incorrectAnswer3}', false)`;
 
         await con.query('INSERT INTO triviaquestions(question, correct_Answer, incorrect_answer_1, incorrect_answer_2, incorrect_answer_3, isVerified) VALUES (?, ?, ?, ?, ?, false)', [question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3]);
 
@@ -505,7 +505,7 @@ exports.submitQuestionsToVerify = async function (questionId) {
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
+        //const sql = `UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ${questionId};`;
 
         await con.query('UPDATE triviaquestions SET isVerified = true WHERE triviaquestions.id = ?;', [questionId]);
 
