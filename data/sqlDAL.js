@@ -352,9 +352,9 @@ exports.createScore = async function (userId, score) {
     const con = await mysql.createConnection(sqlConfig); // Create a connection using your SQL configuration
 
     try {
-        const sql = `INSERT INTO leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
+        const sql = `INSERT INTO Leaderboard(UserId, Score) VALUES (${userId}, ${score})`;
 
-        await con.query('INSERT INTO leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
+        await con.query('INSERT INTO Leaderboard(UserId, Score) VALUES (?, ?)', [userId, score]);
 
         result.status = STATUS_CODES.success;
         result.message = 'Score added to db.';
@@ -380,8 +380,8 @@ exports.getScores = async function () {
 
     try {
         let sql = `SELECT u.Username, t.score
-                    FROM leaderboard AS t
-                    JOIN users AS u ON t.userId = u.userId
+                    FROM Leaderboard AS t
+                    JOIN Users AS u ON t.userId = u.userId
                     ORDER BY t.score DESC
                     LIMIT 10;`;
 
