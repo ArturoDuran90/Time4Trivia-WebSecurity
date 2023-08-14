@@ -260,6 +260,45 @@ exports.createUser = async function (username, hashedPassword, email, firstName,
 }
 
 /**
+ * @param {*} username 
+ * @param {*} email 
+ * @returns a result object with status/message
+ */
+exports.checkIfUsersExist = async function (username, email) {
+    let result = new Result();
+
+    const con = await mysql.createConnection(sqlConfig);
+
+    try {
+        let sql = `SELECT * 
+                    FROM users
+                    WHERE 
+                    Username = '${username}' OR 
+                    Email = '${email}';`;
+
+        const queryResult = await con.query(sql);
+
+        if (queryResult.length === 0) {
+            result.status = STATUS_CODES.success;
+            result.message = 'No matching users found.';
+        } else {
+            result.status = STATUS_CODES.failure;
+            result.message = 'Matching users found.';
+        }
+
+        return result;
+    } catch (err) {
+        console.log(err);
+
+        result.status = STATUS_CODES.failure;
+        result.message = err.message;
+        return result;
+    } finally {
+        con.end();
+    }
+}
+
+/**
  * 
  * @param {*} userId 
  * @param {*} hashedPassword 

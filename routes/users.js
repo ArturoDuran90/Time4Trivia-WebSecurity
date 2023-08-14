@@ -10,28 +10,26 @@ router.get('/register', function (req, res, next) {
 });
 
 router.post('/register', async function (req, res, next) {
-
-
-
   let username = req.body.username;
   let email = req.body.email;
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let password = req.body.password;
+  let createUserResult;
+  let verifyUserResult;
 
   if( typeof username != "string" ||typeof email != "string" ||typeof firstName != "string" ||typeof lastName != "string" ||typeof password != "string" ){
     res.render('register', { title: 'Time 4 Trivia', error: 'Invalid login' })
   }else{
-      let result = await userController.createUser(username, email, firstName, lastName, password);
-  }
+    verifyUserResult = await userController.checkIfUsersExist(username, email);
+    createUserResult = await userController.createUser(username, email, firstName, lastName, password);
 
-
-
-  if (result?.status == STATUS_CODES.success) {
-    res.redirect('/u/login');
-  } else {
-    res.render('register', { title: 'Time 4 Trivia', error: 'Register Failed' });
-  }
+    if (verifyUserResult?.status == STATUS_CODES.success && createUserResult?.status == STATUS_CODES.success) {
+      res.redirect('/u/login');
+    } else {
+      res.render('register', { title: 'Time 4 Trivia', error: 'Register Failed' });
+    }
+  }  
 });
 
 router.get('/login', function (req, res, next) {
