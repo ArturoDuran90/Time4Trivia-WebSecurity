@@ -8,7 +8,7 @@ html
     nav
       a(class='navLink', href='/') Home
       if user
-        if isAdmin == 'yes'
+        if user.isAdmin == 'yes'
           a(class='navLink', href='/a/users/user') Users
           a(class='navLink', href='/a/verifyQuestions') Questions to verify
         a(class='navLink', href='/g/play') Play
