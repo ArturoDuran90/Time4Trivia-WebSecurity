@@ -24,7 +24,7 @@ router.post('/register', async function (req, res, next) {
   if( typeof username != "string" ||typeof email != "string" ||typeof firstName != "string" ||typeof lastName != "string" ||typeof password != "string" ){
     res.render('register', { title: 'Time 4 Trivia', error: 'Invalid login' })
   }else{
-      let result = await userController.createUser(username, email, firstName, lastName, password);
+      result = await userController.createUser(username, email, firstName, lastName, password);
   }
 
 
@@ -50,15 +50,20 @@ router.post('/login', async function (req, res, next) {
   if (result?.status == STATUS_CODES.success) {
     let isAdmin = result.data.roles.includes('admin')
     if(isAdmin){
-      res.cookie('isAdmin', 'yes');
+      req.session.user = { 
+        userId: result.data.userId, 
+        username: result.data.username,
+        admin: 'yes'
+      };
     }else{
-      res.cookie('isAdmin', 'no');
+      req.session.user = { 
+        userId: result.data.userId, 
+        username: result.data.username,
+        isAdmin: 'no'
+      };
     }
 
-    req.session.user = { 
-      userId: result.data.userId, 
-      username: result.data.username
-    };
+
     res.redirect('/');
   } else {
     res.render('login', { title: 'Time 4 Trivia', error: 'Invalid Login. Please try again.' })

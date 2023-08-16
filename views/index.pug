@@ -5,7 +5,7 @@ block content
   if user
     h3 You are logged in as: #{user.username}
     span#emoji &#128527;
-    if isAdmin == 'yes'
+    if user.isAdmin == 'yes'
       h3 You are an Admin!
   else
     h3 Please login to play
