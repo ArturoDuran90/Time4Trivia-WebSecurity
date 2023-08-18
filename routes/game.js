@@ -6,7 +6,7 @@ const STATUS_CODES = require('../models/statusCodes').STATUS_CODES;
 var shuffledQuestions = "";
 
 router.get('/play', async function(req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user) {
     res.redirect('/');
   } else {
     let questions = await userController.getQuestions();
@@ -19,7 +19,7 @@ router.get('/play', async function(req, res, next) {
 
 router.post('/score', async function(req, res, next) {
   var userScore = 0;
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user) {
     res.redirect('/');
   } else {
     var userAnswers = []; // Array to store user's answers
@@ -60,7 +60,7 @@ router.post('/score', async function(req, res, next) {
 });
 
 router.get('/leaderboard', async function(req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user) {
     res.redirect('/');
   } else {
     let leaders = await userController.getScores();
@@ -69,7 +69,7 @@ router.get('/leaderboard', async function(req, res, next) {
 });
 
 router.get('/create', function (req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user) {
     res.redirect('/');
   } else {
     res.render('create', { title: 'Create a Trivia Question', error: '' });
@@ -77,7 +77,7 @@ router.get('/create', function (req, res, next) {
 });
 
 router.post('/create', async function (req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user) {
     res.redirect('/');
   } else {
     let question = req.body.question;

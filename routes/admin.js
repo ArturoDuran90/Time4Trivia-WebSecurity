@@ -7,12 +7,12 @@ const userController = require('../controllers/userController');
 
 router.get('/users/:role', async function (req, res, next) {
   let role = req.params.role;
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user || req.session.user.admin == 'no') {
     res.redirect('/');
   } else {
     let users = await userController.getUsers(role);
 
-    res.render('users', { title: 'Time 4 Trivia', user: req.session.user, isAdmin: req.cookies.isAdmin, users: users });
+    res.render('users', { title: 'Time 4 Trivia', user: req.session.user, users: users });
   }
 });
 
@@ -25,16 +25,16 @@ router.get('/delete/:userId', async function (req, res, next) {
 });
 
 router.get('/verifyQuestions', async function(req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user ||  req.session.user.admin == 'no') {
     res.redirect('/');
   } else {
     let questionsToVerify = await userController.getQuestionsToVerify();
-    res.render('verifyQuestion', {title: "Questions to Verify", user: req.session.user, isAdmin: req.cookies.isAdmin, questionsToVerify: questionsToVerify});
+    res.render('verifyQuestion', {title: "Questions to Verify", user: req.session.user, questionsToVerify: questionsToVerify});
   }
 });
 
 router.post('/verifyQuestions', async function(req, res, next) {
-  if (!req.session.user || !req.cookies.isAdmin) {
+  if (!req.session.user ||  req.session.user.admin == 'no') {
     res.redirect('/');
   } else {
     let questionId = req.body.questionId; //get question id
